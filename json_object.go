@@ -54,7 +54,3 @@ func (this *JSONObject) GetFloat32(key string) float32 {
 func (this *JSONObject) GetFloat64(key string) float64 {
 	return this.innerMap[key].(float64)
 }
-
-func (this *JSONObject) IsNil(key string) bool {
-	return this.innerMap[key] == nil
-}

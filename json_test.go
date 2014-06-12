@@ -2,6 +2,7 @@ package simplejson
 
 import (
 	"testing"
+	"fmt"
 	"strconv"
 )
 
@@ -30,33 +31,6 @@ var jsonArrayAsRoot = `[
 	"stringElement"
 ]
 `
-
-func TestParsingStringToJSONArray(t *testing.T) {
-	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot);
-	if err != nil {
-		t.Error("Parsing failed with error: " + err.Error())
-		t.FailNow()
-	}
-
-	object0 := jsonArray.GetJSONObject(0)
-	if stringValue := object0.GetString("elemKeyString"); stringValue != "stringValue" {
-		t.Error("object[0]::elemKeyString was " + stringValue + " instead of \"stringValue\" ")
-	}
-	if intValue := object0.GetInt("elemKeyInt"); intValue != 0 {
-		t.Error("object[0]::elemKeyInt was " + strconv.Itoa(intValue) + " instead of 0 ")
-	}
-
-	object1 := jsonArray.GetInt(1)
-	if object1 != 123 {
-		t.Error("object1 was %d instead of 123 ",object1)
-	}
-
-	object2 := jsonArray.GetString(2)
-	if object2 != "stringElement" {
-		t.Error("object1 was " + object2 + " instead of \"stringElement\"")
-	}
-
-}
 
 func TestJSONObjectWithoutArrays(t *testing.T) {
 	jsonObject, err := NewJSONObjectFromString(jsonString);
@@ -93,5 +67,32 @@ func TestJSONObjectWithoutArrays(t *testing.T) {
 	jsonValue := jsonObject.GetJSONObject("keyJSONObject")
 	if (jsonValue.GetString("keyString") != "stringValue") {
 		t.Error("keyJSONObject didn't include the string strin")
+	}
+}
+
+func TestParsingStringToJSONArray(t *testing.T) {
+	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot);
+	fmt.Printf("%d",len(jsonArray))
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+
+	object0 := jsonArray.GetJSONObject(0)
+	if stringValue := object0.GetString("elemKeyString"); stringValue != "stringValue" {
+		t.Error("object[0]::elemKeyString was " + stringValue + " instead of \"stringValue\" ")
+	}
+	if intValue := object0.GetInt("elemKeyInt"); intValue != 0 {
+		t.Error("object[0]::elemKeyInt was " + strconv.Itoa(intValue) + " instead of 0 ")
+	}
+
+	object1 := jsonArray.GetInt(1)
+	if object1 != 123 {
+		t.Error("object1 was %d instead of 123 ",object1)
+	}
+
+	object2 := jsonArray.GetString(2)
+	if object2 != "stringElement" {
+		t.Error("object1 was " + object2 + " instead of \"stringElement\"")
 	}
 }

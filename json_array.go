@@ -47,14 +47,15 @@ func (this *JSONArray) GetInt(index int) int {
 	return float64ToInt(this.innerArray[index].(float64))
 }
 
-func (this *JSONArray) getFloat32(index int) float32 {
+func (this *JSONArray) GetFloat32(index int) float32 {
 	return this.innerArray[index].(float32)
 }
 
-func (this *JSONArray) getFloat64(index int) float64 {
+func (this *JSONArray) GetFloat64(index int) float64 {
 	return this.innerArray[index].(float64)
 }
 
-func (this *JSONArray) isNil(index int) bool {
-	return this.innerArray[index] == nil
+func (this *JSONArray) Length() int {
+	theInnerArray:=this.innerArray;
+	return len(theInnerArray)
 }
