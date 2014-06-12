@@ -1,7 +1,18 @@
 package simplejson
 
+import "encoding/json"
+
 type JSONArray struct{
 	innerArray [] interface{}
+}
+
+func NewJSONArrayFromString(jsonarray string) (*JSONArray, error) {
+	var resultingArray []interface{}
+	err := json.Unmarshal([]byte(jsonarray), &resultingArray)
+	if err != nil {
+		return nil, err
+	}
+	return &JSONArray{resultingArray}, nil
 }
 
 func NewJSONArray() *JSONArray {
@@ -33,7 +44,7 @@ func (this *JSONArray) GetBool(index int) bool {
 }
 
 func (this *JSONArray) GetInt(index int) int {
-	return this.innerArray[index].(int)
+	return float64ToInt(this.innerArray[index].(float64))
 }
 
 func (this *JSONArray) getFloat32(index int) float32 {

@@ -1,9 +1,6 @@
 package simplejson
 
-import (
-	"encoding/json"
-	"math"
-)
+import "encoding/json"
 
 type JSONObject struct{
 	innerMap map[string] interface{}
@@ -47,12 +44,7 @@ func (this *JSONObject) GetBool(key string) bool {
 }
 
 func (this *JSONObject) GetInt(key string) int {
-	value := this.innerMap[key].(float64)
-	if intValue := math.Trunc(value); intValue != value {
-		panic("Called GetInt(\"" + key + "\"), but was float64")
-	}else {
-		return int(intValue)
-	}
+	return float64ToInt(this.innerMap[key].(float64))
 }
 
 func (this *JSONObject) GetFloat32(key string) float32 {
