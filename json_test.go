@@ -2,8 +2,8 @@ package simplejson
 
 import (
 	"testing"
-	"fmt"
 	"strconv"
+	"fmt"
 )
 
 var jsonString = `{
@@ -31,6 +31,37 @@ var jsonArrayAsRoot = `[
 	"stringElement"
 ]
 `
+var jsonArrayAsRoot2 = `[
+	0,
+	1,
+	2
+]
+`
+
+func TestJsonArrayWithInts(t *testing.T) {
+	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot2);
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+	if jsonArray.GetInt(0) != 0 || jsonArray.GetInt(1) != 1 || jsonArray.GetInt(2) != 2 {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+}
+
+func TestParseInt(t *testing.T) {
+	var someFloat64 float64
+	var someInt int
+	var someInterface interface{}
+	someInt = 123
+	someFloat64 = 123
+	someInterface = 123
+	if parseInt(someInt) != 123 || parseInt(someFloat64) != 123 || parseInt(someInterface) != 123 {
+		t.Error("parseInt could not parse interface")
+		t.FailNow()
+	}
+}
 
 func TestJSONObjectWithoutArrays(t *testing.T) {
 	jsonObject, err := NewJSONObjectFromString(jsonString);
@@ -72,7 +103,6 @@ func TestJSONObjectWithoutArrays(t *testing.T) {
 
 func TestParsingStringToJSONArray(t *testing.T) {
 	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot);
-	fmt.Printf("%d",len(jsonArray))
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
@@ -88,11 +118,37 @@ func TestParsingStringToJSONArray(t *testing.T) {
 
 	object1 := jsonArray.GetInt(1)
 	if object1 != 123 {
-		t.Error("object1 was %d instead of 123 ",object1)
+		t.Error("object1 was %d instead of 123 ", object1)
 	}
 
 	object2 := jsonArray.GetString(2)
 	if object2 != "stringElement" {
 		t.Error("object1 was " + object2 + " instead of \"stringElement\"")
+	}
+}
+
+
+func TestSet(t *testing.T) {
+	jsonobject := NewJSONObject();
+	jsonobject.Set("object1", "stringValue")
+	if value := jsonobject.GetString("object1"); value != "stringValue" {
+		t.Error("object1 was " + value + " instead of \"stringValue\"")
+	}
+
+	object2 := make([]int, 5, 5)
+	object2[3] = 1988
+	jsonobject.Set("object2", object2)
+	fmt.Println(jsonobject.String())
+	valueArray := jsonobject.GetJSONArray("object2")
+	if current := valueArray.GetInt(0); current != 0 {
+		t.Error("object2[0] was %d instead of 0", current)
+	}else if current := valueArray.GetInt(1); current != 0 {
+		t.Error("object2[1] was %d instead of 0", current)
+	}else if current := valueArray.GetInt(2); current != 0 {
+		t.Error("object2[2] was %d instead of 0", current)
+	}else if current := valueArray.GetInt(3); current != 1988 {
+		t.Error("object2[3] was %d instead of 1988", current)
+	}else if current := valueArray.GetInt(4); current != 0 {
+		t.Error("object2[4] was %d instead of 0", current)
 	}
 }

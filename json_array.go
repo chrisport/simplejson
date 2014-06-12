@@ -44,7 +44,7 @@ func (this *JSONArray) GetBool(index int) bool {
 }
 
 func (this *JSONArray) GetInt(index int) int {
-	return float64ToInt(this.innerArray[index].(float64))
+	return parseInt(this.innerArray[index])
 }
 
 func (this *JSONArray) GetFloat32(index int) float32 {
