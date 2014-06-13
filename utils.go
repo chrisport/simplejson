@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 )
 
+// tries to parse an int from an interface and returns the resulting int
 func parseInt(rawValue interface{}) int {
 	switch t := rawValue.(type) {
 	default:
@@ -22,19 +23,22 @@ func parseInt(rawValue interface{}) int {
 	}
 }
 
-func interfaceToJsonCompatible(aInterface interface {}) (interface {}, bool) {
+// casts interface to a json-compatible format and returns the resulting value as interface
+func interfaceToJsonCompatible(aInterface interface{}) (interface{}, bool) {
+	//TODO research for better solution (e.g. direct encoding for every possible type as Marshal is doing
 	marshalled, err := json.Marshal(aInterface)
 	if err != nil {
 		return nil, false
 	}
-	var unmarshalled interface {}
-	err = json.Unmarshal(marshalled,&unmarshalled)
-	if(err != nil){
+	var unmarshalled interface{}
+	err = json.Unmarshal(marshalled, &unmarshalled)
+	if (err != nil) {
 		return nil, false
 	}
 	return unmarshalled, true
 }
 
+// parses an interface to an interface array
 func interfaceToInterfaceArray(aInterface interface{}) (interfaceSlice []interface{}) {
 	// these are the default array types, there should never be a different type stored in an JSONArray/JSONObject
 	// the method Set(Key, Value) has to ensure that the types are converted to one of those.
