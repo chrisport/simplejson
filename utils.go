@@ -3,6 +3,7 @@ package simplejson
 import (
 	"math"
 	"fmt"
+	"encoding/json"
 )
 
 func parseInt(rawValue interface{}) int {
@@ -19,6 +20,19 @@ func parseInt(rawValue interface{}) int {
 		return t
 
 	}
+}
+
+func interfaceToJsonCompatible(aInterface interface {}) (interface {}, bool) {
+	marshalled, err := json.Marshal(aInterface)
+	if err != nil {
+		return nil, false
+	}
+	var unmarshalled interface {}
+	err = json.Unmarshal(marshalled,&unmarshalled)
+	if(err != nil){
+		return nil, false
+	}
+	return unmarshalled, true
 }
 
 func interfaceToInterfaceArray(aInterface interface{}) (interfaceSlice []interface{}) {

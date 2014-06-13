@@ -4,6 +4,7 @@ import (
 	"testing"
 	"strconv"
 	"fmt"
+	_"github.com/smartystreets/goconvey/convey"
 )
 
 var jsonString = `{

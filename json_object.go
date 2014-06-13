@@ -51,8 +51,13 @@ func (this *JSONObject) GetFloat64(key string) float64 {
 	return this.innerMap[key].(float64)
 }
 
-func (this *JSONObject) Set(key string, value interface{}) {
-	this.innerMap[key] = value
+func (this *JSONObject) Set(key string, value interface{}) bool {
+	unmarshalled, ok := interfaceToJsonCompatible(value)
+	if !ok {
+		return ok
+	}
+	this.innerMap[key] = unmarshalled
+	return true
 }
 
 func (this *JSONObject) String() (string, error) {
