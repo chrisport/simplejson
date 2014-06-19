@@ -23,6 +23,22 @@ var jsonString = `{
 	]
 }`
 
+var jsonArrayAllTypes = `{
+	"keyString":["stringValue"],
+	"keyInt": [123],
+	"keyFloat64": [1.23],
+	"keyFloat32": [1.23],
+	"keyBool": [true],
+	"keyJSONObject": [{
+						"keyString":"stringValue",
+						"keyInt": 123
+					}],
+	"keyArray":[[
+		"string1",
+		"string2"
+	]]
+}`
+
 var jsonArrayAsRoot = `[
 	{
 		"elemKeyString": "stringValue",
@@ -64,7 +80,7 @@ func TestParseInt(t *testing.T) {
 	}
 }
 
-func TestJSONObjectWithoutArrays(t *testing.T) {
+func TestJSONObjectAllTypesExceptArray(t *testing.T) {
 	jsonObject, err := NewJSONObjectFromString(jsonString);
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
@@ -86,7 +102,7 @@ func TestJSONObjectWithoutArrays(t *testing.T) {
 		t.Errorf("keyFloat32 was %d instead of 1.23 ", float32Value)
 	}
 
-	float64Value := jsonObject.GetFloat32("keyFloat64")
+	float64Value := jsonObject.GetFloat64("keyFloat64")
 	if (float64Value != 1.23) {
 		t.Errorf("keyFloat64 was %d instead of 1.23 ", float64Value)
 	}
@@ -97,6 +113,44 @@ func TestJSONObjectWithoutArrays(t *testing.T) {
 	}
 
 	jsonValue := jsonObject.GetJSONObject("keyJSONObject")
+	if (jsonValue.GetString("keyString") != "stringValue") {
+		t.Error("keyJSONObject didn't include the string strin")
+	}
+}
+
+func TestJSONArrayAllTypes(t *testing.T) {
+	jsonObject, err := NewJSONObjectFromString(jsonArrayAllTypes);
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+
+	stringValue := jsonObject.GetJSONArray("keyString").GetString(0)
+	if (stringValue != "stringValue") {
+		t.Error("keyString was " + stringValue + " instead of \"stringValue\" ")
+	}
+
+	intValue := jsonObject.GetJSONArray("keyInt").GetInt(0)
+	if (intValue != 123) {
+		t.Errorf("keyInt was %d instead of 123 ", intValue)
+	}
+
+	float32Value := jsonObject.GetJSONArray("keyFloat32").GetFloat32(0)
+	if (float32Value != 1.23) {
+		t.Errorf("keyFloat32 was %d instead of 1.23 ", float32Value)
+	}
+
+	float64Value := jsonObject.GetJSONArray("keyFloat64").GetFloat64(0)
+	if (float64Value != 1.23) {
+		t.Errorf("keyFloat64 was %d instead of 1.23 ", float64Value)
+	}
+
+	boolValue := jsonObject.GetJSONArray("keyBool").GetBool(0)
+	if (boolValue != true) {
+		t.Errorf("keyBool was %b instead of true ", boolValue)
+	}
+
+	jsonValue := jsonObject.GetJSONArray("keyJSONObject").GetJSONObject(0)
 	if (jsonValue.GetString("keyString") != "stringValue") {
 		t.Error("keyJSONObject didn't include the string strin")
 	}
