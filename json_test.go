@@ -136,8 +136,8 @@ func TestSet(t *testing.T) {
 		t.Error("object1 was " + value + " instead of \"stringValue\"")
 	}
 
-	object2 := make([]int, 5, 5)
-	object2[3] = 1988
+	object2 := make([]float32, 5, 5)
+	object2[3] = 19.88
 	jsonobject.Set("object2", object2)
 	fmt.Println(jsonobject.String())
 	valueArray := jsonobject.GetJSONArray("object2")
@@ -147,7 +147,7 @@ func TestSet(t *testing.T) {
 		t.Error("object2[1] was %d instead of 0", current)
 	}else if current := valueArray.GetInt(2); current != 0 {
 		t.Error("object2[2] was %d instead of 0", current)
-	}else if current := valueArray.GetInt(3); current != 1988 {
+	}else if current := valueArray.GetFloat32(3); current != 19.88 {
 		t.Error("object2[3] was %d instead of 1988", current)
 	}else if current := valueArray.GetInt(4); current != 0 {
 		t.Error("object2[4] was %d instead of 0", current)

@@ -53,7 +53,8 @@ func (this *JSONArray) GetInt(index int) int {
 
 // GetFloat32 returns float32 from specific index
 func (this *JSONArray) GetFloat32(index int) float32 {
-	return this.innerArray[index].(float32)
+	float64Representation := float32(this.innerArray[index].(float64))
+	return float64Representation
 }
 
 // GetFloat64 returns float64 from specific index
