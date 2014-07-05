@@ -26,39 +26,39 @@ func NewJSONArrayWithArray(array []interface{}) (*JSONArray, bool) {
 	return &JSONArray{castedArray}, true
 }
 
-// GetJSONArray returns JSONArray from specific index
-func (this *JSONArray) GetJSONArray(index int) *JSONArray {
+// JSONArray returns JSONArray from specific index
+func (this *JSONArray) JSONArray(index int) *JSONArray {
 	return &JSONArray{this.innerArray[index].([]interface{})}
 }
 
-// GetJSONObject returns JSONArray from specific index
-func (this *JSONArray) GetJSONObject(index int) *JSONObject {
+// JSONObject returns JSONArray from specific index
+func (this *JSONArray) JSONObject(index int) *JSONObject {
 	return &JSONObject{this.innerArray[index].(map[string]interface{})}
 }
 
-// GetString returns String from specific index
-func (this *JSONArray) GetString(index int) string {
+// String returns String from specific index
+func (this *JSONArray) String(index int) string {
 	return this.innerArray[index].(string)
 }
 
-// GetBool returns bool from specific index
-func (this *JSONArray) GetBool(index int) bool {
+// Bool returns bool from specific index
+func (this *JSONArray) Bool(index int) bool {
 	return this.innerArray[index].(bool)
 }
 
-// GetInt returns int from specific index
-func (this *JSONArray) GetInt(index int) int {
+// Int returns int from specific index
+func (this *JSONArray) Int(index int) int {
 	return parseInt(this.innerArray[index])
 }
 
-// GetFloat32 returns float32 from specific index
-func (this *JSONArray) GetFloat32(index int) float32 {
+// Float32 returns float32 from specific index
+func (this *JSONArray) Float32(index int) float32 {
 	float64Representation := float32(this.innerArray[index].(float64))
 	return float64Representation
 }
 
-// GetFloat64 returns float64 from specific index
-func (this *JSONArray) GetFloat64(index int) float64 {
+// Float64 returns float64 from specific index
+func (this *JSONArray) Float64(index int) float64 {
 	return this.innerArray[index].(float64)
 }
 

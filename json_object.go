@@ -25,38 +25,38 @@ func newJSONObjectWithMap(fromMap map[string] interface{}) *JSONObject {
 	return &JSONObject{fromMap}
 }
 
-// GetJSONArray returns JSONArray from specific key
-func (this *JSONObject) GetJSONArray(key string) *JSONArray {
+// JSONArray returns JSONArray from specific key
+func (this *JSONObject) JSONArray(key string) *JSONArray {
 	return &JSONArray{interfaceToInterfaceArray(this.innerMap[key])}
 }
 
-// GetJSONObject returns JSONObject from specific key
-func (this *JSONObject) GetJSONObject(key string) *JSONObject {
+// JSONObject returns JSONObject from specific key
+func (this *JSONObject) JSONObject(key string) *JSONObject {
 	return &JSONObject{this.innerMap[key].(map[string]interface{})}
 }
 
-// GetString returns string from specific key
-func (this *JSONObject) GetString(key string) string {
+// String returns string from specific key
+func (this *JSONObject) String(key string) string {
 	return this.innerMap[key].(string)
 }
 
-// GetBool returns bool from specific key
-func (this *JSONObject) GetBool(key string) bool {
+// Bool returns bool from specific key
+func (this *JSONObject) Bool(key string) bool {
 	return this.innerMap[key].(bool)
 }
 
-// GetInt returns int from specific key
-func (this *JSONObject) GetInt(key string) int {
+// Int returns int from specific key
+func (this *JSONObject) Int(key string) int {
 	return parseInt(this.innerMap[key])
 }
 
-// GetFloat32 returns float32 from specific key
-func (this *JSONObject) GetFloat32(key string) float32 {
+// Float32 returns float32 from specific key
+func (this *JSONObject) Float32(key string) float32 {
 	return float32(this.innerMap[key].(float64))
 }
 
-// GetFloat64 returns float64 from specific key
-func (this *JSONObject) GetFloat64(key string) float64 {
+// Float64 returns float64 from specific key
+func (this *JSONObject) Float64(key string) float64 {
 	return this.innerMap[key].(float64)
 }
 
@@ -71,7 +71,7 @@ func (this *JSONObject) Set(key string, value interface{}) bool {
 }
 
 // String return json-representation as string
-func (this *JSONObject) String() (string, error) {
+func (this *JSONObject) AsString() (string, error) {
 	jsonString, err := json.Marshal(this.innerMap)
 	return string(jsonString), err
 }

@@ -1,3 +1,5 @@
+[![Build Status](https://drone.io/github.com/chrisport/simplejson/status.png)](https://drone.io/github.com/chrisport/simplejson/latest)
+
 simplejson
 ==========
 
