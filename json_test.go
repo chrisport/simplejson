@@ -60,6 +60,7 @@ func TestJsonArrayWithInts(t *testing.T) {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
 	}
+
 	if jsonArray.Int(0) != 0 || jsonArray.Int(1) != 1 || jsonArray.Int(2) != 2 {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
@@ -182,6 +183,21 @@ func TestParsingStringToJSONArray(t *testing.T) {
 }
 
 
+func TestSegmented(t *testing.T) {
+	jsonObject, err := NewJSONObjectFromString(jsonArrayAllTypes);
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+	sampleSegmentedKeys := "keyJSONObject::0::keyString"
+	stringValue := jsonObject.String(sampleSegmentedKeys)
+	if stringValue != "stringValue" {
+		t.Error("object[0]::elemKeyString was " + fmt.Sprint(stringValue) + " instead of \"stringValue\" ")
+		t.Fail()
+	}
+
+}
+
 func TestSet(t *testing.T) {
 	jsonobject := NewJSONObject();
 	jsonobject.Set("object1", "stringValue")
@@ -192,7 +208,6 @@ func TestSet(t *testing.T) {
 	object2 := make([]float32, 5, 5)
 	object2[3] = 19.88
 	jsonobject.Set("object2", object2)
-	fmt.Println(jsonobject.AsString())
 	valueArray := jsonobject.JSONArray("object2")
 	if current := valueArray.Int(0); current != 0 {
 		t.Error("object2[0] was %d instead of 0", current)
