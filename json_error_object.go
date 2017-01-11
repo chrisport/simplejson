@@ -10,8 +10,8 @@ type JSONErrorObject struct {
 	firstFailingKey string
 }
 
-func (j *JSONErrorObject) JSONArray(key string) *JSONArray {
-	return nil
+func (j *JSONErrorObject) JSONArray(key string) JSONArray {
+	return &JSONErrorArray{j.firstFailingKey}
 }
 
 func (j *JSONErrorObject) JSONObject(key string) JSONObject {

@@ -2,7 +2,6 @@ package simplejson
 
 import (
 	"encoding/json"
-	"log"
 )
 
 type JSONObjectS struct {
@@ -10,7 +9,7 @@ type JSONObjectS struct {
 }
 
 type JSONObject interface {
-	JSONArray(key string) *JSONArray
+	JSONArray(key string) JSONArray
 	JSONObject(key string) JSONObject
 	String(key string) string
 	Bool(key string) bool
@@ -43,8 +42,12 @@ func newJSONObjectWithMap(fromMap map[string]interface{}) JSONObject {
 }
 
 // JSONArray returns JSONArray from specific key
-func (j *JSONObjectS) JSONArray(key string) *JSONArray {
-	return &JSONArray{interfaceToInterfaceArray(j.innerMap[key])}
+func (j *JSONObjectS) JSONArray(key string) JSONArray {
+	if val, ok := j.innerMap[key]; ok {
+		return &JSONArrayS{interfaceToInterfaceArray(val)}
+	} else {
+		return &JSONErrorArray{key}
+	}
 }
 
 // JSONObject returns JSONObject from specific key

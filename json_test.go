@@ -1,7 +1,6 @@
 package simplejson
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -203,7 +202,7 @@ func TestSet(t *testing.T) {
 	object2 := make([]float32, 5, 5)
 	object2[3] = 19.88
 	jsonobject.Set("object2", object2)
-	fmt.Println(jsonobject.AsString())
+
 	valueArray := jsonobject.JSONArray("object2")
 	if current := valueArray.Int(0); current != 0 {
 		t.Errorf("object2[0] was %d instead of 0", current)
@@ -239,6 +238,18 @@ func TestNestedJSONObject_whenAskingChainedInvalidKeys_returnErrorWithoutPanic(t
 	}
 
 	innerObject := nestedObject.JSONObject("invalidKey").JSONObject("keyJSONObject")
+	assert.True(t, innerObject.hasError(), "inner object must have error")
+	assert.Equal(t, "invalidKey", innerObject.failingKey(), "inner object must have error")
+}
+
+func TestNestedJSONObject_whenAskingChainedInvalidKeysIncludingArray_returnErrorWithoutPanic(t *testing.T) {
+	nestedObject, err := NewJSONObjectFromString(nestedJsonString)
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+
+	innerObject := nestedObject.JSONObject("invalidKey").JSONArray("keyJSONObject").JSONObject(5)
 	assert.True(t, innerObject.hasError(), "inner object must have error")
 	assert.Equal(t, "invalidKey", innerObject.failingKey(), "inner object must have error")
 }
