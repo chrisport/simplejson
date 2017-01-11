@@ -1,9 +1,10 @@
 package simplejson
 
 import (
-	"testing"
-	"strconv"
 	"fmt"
+	"github.com/stretchr/testify/assert"
+	"strconv"
+	"testing"
 )
 
 var jsonString = `{
@@ -20,6 +21,17 @@ var jsonString = `{
 		"string1",
 		"string2"
 	]
+}`
+
+var nestedJsonString = `{
+	"keyJSONObject":
+		{
+			"keyJSONObject":
+				{
+					"keyString":"stringValue"
+				}
+			},
+	"keyString":"stringValue"
 }`
 
 var jsonArrayAllTypes = `{
@@ -55,7 +67,7 @@ var jsonArrayAsRoot2 = `[
 `
 
 func TestJsonArrayWithInts(t *testing.T) {
-	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot2);
+	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot2)
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
@@ -80,83 +92,83 @@ func TestParseInt(t *testing.T) {
 }
 
 func TestJSONObjectAllTypesExceptArray(t *testing.T) {
-	jsonObject, err := NewJSONObjectFromString(jsonString);
+	jsonObject, err := NewJSONObjectFromString(jsonString)
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
 	}
 
 	stringValue := jsonObject.String("keyString")
-	if (stringValue != "stringValue") {
+	if stringValue != "stringValue" {
 		t.Error("keyString was " + stringValue + " instead of \"stringValue\" ")
 	}
 
 	intValue := jsonObject.Int("keyInt")
-	if (intValue != 123) {
+	if intValue != 123 {
 		t.Errorf("keyInt was %d instead of 123 ", intValue)
 	}
 
 	float32Value := jsonObject.Float32("keyFloat32")
-	if (float32Value != 1.23) {
+	if float32Value != 1.23 {
 		t.Errorf("keyFloat32 was %d instead of 1.23 ", float32Value)
 	}
 
 	float64Value := jsonObject.Float64("keyFloat64")
-	if (float64Value != 1.23) {
+	if float64Value != 1.23 {
 		t.Errorf("keyFloat64 was %d instead of 1.23 ", float64Value)
 	}
 
 	boolValue := jsonObject.Bool("keyBool")
-	if (boolValue != true) {
+	if boolValue != true {
 		t.Errorf("keyBool was %b instead of true ", boolValue)
 	}
 
 	jsonValue := jsonObject.JSONObject("keyJSONObject")
-	if (jsonValue.String("keyString") != "stringValue") {
+	if jsonValue.String("keyString") != "stringValue" {
 		t.Error("keyJSONObject didn't include the string strin")
 	}
 }
 
 func TestJSONArrayAllTypes(t *testing.T) {
-	jsonObject, err := NewJSONObjectFromString(jsonArrayAllTypes);
+	jsonObject, err := NewJSONObjectFromString(jsonArrayAllTypes)
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
 	}
 
 	stringValue := jsonObject.JSONArray("keyString").String(0)
-	if (stringValue != "stringValue") {
+	if stringValue != "stringValue" {
 		t.Error("keyString was " + stringValue + " instead of \"stringValue\" ")
 	}
 
 	intValue := jsonObject.JSONArray("keyInt").Int(0)
-	if (intValue != 123) {
+	if intValue != 123 {
 		t.Errorf("keyInt was %d instead of 123 ", intValue)
 	}
 
 	float32Value := jsonObject.JSONArray("keyFloat32").Float32(0)
-	if (float32Value != 1.23) {
+	if float32Value != 1.23 {
 		t.Errorf("keyFloat32 was %d instead of 1.23 ", float32Value)
 	}
 
 	float64Value := jsonObject.JSONArray("keyFloat64").Float64(0)
-	if (float64Value != 1.23) {
+	if float64Value != 1.23 {
 		t.Errorf("keyFloat64 was %d instead of 1.23 ", float64Value)
 	}
 
 	boolValue := jsonObject.JSONArray("keyBool").Bool(0)
-	if (boolValue != true) {
+	if boolValue != true {
 		t.Errorf("keyBool was %b instead of true ", boolValue)
 	}
 
 	jsonValue := jsonObject.JSONArray("keyJSONObject").JSONObject(0)
-	if (jsonValue.String("keyString") != "stringValue") {
+	if jsonValue.String("keyString") != "stringValue" {
 		t.Error("keyJSONObject didn't include the string strin")
 	}
 }
 
 func TestParsingStringToJSONArray(t *testing.T) {
-	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot);
+	jsonArray, err := NewJSONArrayFromString(jsonArrayAsRoot)
 	if err != nil {
 		t.Error("Parsing failed with error: " + err.Error())
 		t.FailNow()
@@ -172,7 +184,7 @@ func TestParsingStringToJSONArray(t *testing.T) {
 
 	object1 := jsonArray.Int(1)
 	if object1 != 123 {
-		t.Error("object1 was %d instead of 123 ", object1)
+		t.Errorf("object1 was %d instead of 123 ", object1)
 	}
 
 	object2 := jsonArray.String(2)
@@ -181,9 +193,8 @@ func TestParsingStringToJSONArray(t *testing.T) {
 	}
 }
 
-
 func TestSet(t *testing.T) {
-	jsonobject := NewJSONObject();
+	jsonobject := NewJSONObject()
 	jsonobject.Set("object1", "stringValue")
 	if value := jsonobject.String("object1"); value != "stringValue" {
 		t.Error("object1 was " + value + " instead of \"stringValue\"")
@@ -195,14 +206,39 @@ func TestSet(t *testing.T) {
 	fmt.Println(jsonobject.AsString())
 	valueArray := jsonobject.JSONArray("object2")
 	if current := valueArray.Int(0); current != 0 {
-		t.Error("object2[0] was %d instead of 0", current)
-	}else if current := valueArray.Int(1); current != 0 {
-		t.Error("object2[1] was %d instead of 0", current)
-	}else if current := valueArray.Int(2); current != 0 {
-		t.Error("object2[2] was %d instead of 0", current)
-	}else if current := valueArray.Float32(3); current != 19.88 {
-		t.Error("object2[3] was %d instead of 1988", current)
-	}else if current := valueArray.Int(4); current != 0 {
-		t.Error("object2[4] was %d instead of 0", current)
+		t.Errorf("object2[0] was %d instead of 0", current)
+	} else if current := valueArray.Int(1); current != 0 {
+		t.Errorf("object2[1] was %d instead of 0", current)
+	} else if current := valueArray.Int(2); current != 0 {
+		t.Errorf("object2[2] was %d instead of 0", current)
+	} else if current := valueArray.Float32(3); current != 19.88 {
+		t.Errorf("object2[3] was %d instead of 1988", current)
+	} else if current := valueArray.Int(4); current != 0 {
+		t.Errorf("object2[4] was %d instead of 0", current)
 	}
+}
+
+func TestNestedJSONObject_whenAskingValidKeys_returnValue(t *testing.T) {
+	nestedObject, err := NewJSONObjectFromString(nestedJsonString)
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+
+	stringValue := nestedObject.JSONObject("keyJSONObject").JSONObject("keyJSONObject").String("keyString")
+	if stringValue != "stringValue" {
+		t.Error("object[0]::elemKeyString was " + stringValue + " instead of \"stringValue\" ")
+	}
+}
+
+func TestNestedJSONObject_whenAskingChainedInvalidKeys_returnErrorWithoutPanic(t *testing.T) {
+	nestedObject, err := NewJSONObjectFromString(nestedJsonString)
+	if err != nil {
+		t.Error("Parsing failed with error: " + err.Error())
+		t.FailNow()
+	}
+
+	innerObject := nestedObject.JSONObject("invalidKey").JSONObject("keyJSONObject")
+	assert.True(t, innerObject.hasError(), "inner object must have error")
+	assert.Equal(t, "invalidKey", innerObject.failingKey(), "inner object must have error")
 }

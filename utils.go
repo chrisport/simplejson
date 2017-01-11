@@ -1,9 +1,9 @@
 package simplejson
 
 import (
-	"math"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"math"
 )
 
 // tries to parse an int from an interface and returns the resulting int
@@ -14,7 +14,7 @@ func parseInt(rawValue interface{}) int {
 	case float64:
 		if intValue := math.Trunc(t); intValue != rawValue {
 			panic(fmt.Sprintf("float64 could not be converted to int. Value was: %d", rawValue))
-		}else {
+		} else {
 			return int(intValue)
 		}
 	case int:
@@ -32,7 +32,7 @@ func interfaceToJsonCompatible(aInterface interface{}) (interface{}, bool) {
 	}
 	var unmarshalled interface{}
 	err = json.Unmarshal(marshalled, &unmarshalled)
-	if (err != nil) {
+	if err != nil {
 		return nil, false
 	}
 	return unmarshalled, true
@@ -47,24 +47,24 @@ func interfaceToInterfaceArray(aInterface interface{}) (interfaceSlice []interfa
 		panic(fmt.Sprintf("interface{} could not be converted to []interface{}. Value was: %t", aInterface))
 	case []bool:
 		interfaceSlice = make([]interface{}, len(dataSlice))
-	for i, d := range dataSlice {
-		interfaceSlice[i] = d
-	}
+		for i, d := range dataSlice {
+			interfaceSlice[i] = d
+		}
 	case []string:
 		interfaceSlice = make([]interface{}, len(dataSlice))
-	for i, d := range dataSlice {
-		interfaceSlice[i] = d
-	}
+		for i, d := range dataSlice {
+			interfaceSlice[i] = d
+		}
 	case []float64:
 		interfaceSlice = make([]interface{}, len(dataSlice))
-	for i, d := range dataSlice {
-		interfaceSlice[i] = d
-	}
+		for i, d := range dataSlice {
+			interfaceSlice[i] = d
+		}
 	case []interface{}:
 		interfaceSlice = make([]interface{}, len(dataSlice))
-	for i, d := range dataSlice {
-		interfaceSlice[i] = d
-	}
+		for i, d := range dataSlice {
+			interfaceSlice[i] = d
+		}
 	}
 	return
 }

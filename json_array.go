@@ -3,8 +3,8 @@ package simplejson
 import "encoding/json"
 
 //JSONArray is a struct that represents an Array of JSON-compatible types and provides methods to access them
-type JSONArray struct{
-	innerArray [] interface{}
+type JSONArray struct {
+	innerArray []interface{}
 }
 
 // NewJSONArrayFromString returns a new JSONArray, parsed from a string or an error if unsuccessful
@@ -32,8 +32,8 @@ func (this *JSONArray) JSONArray(index int) *JSONArray {
 }
 
 // JSONObject returns JSONArray from specific index
-func (this *JSONArray) JSONObject(index int) *JSONObject {
-	return &JSONObject{this.innerArray[index].(map[string]interface{})}
+func (this *JSONArray) JSONObject(index int) JSONObject {
+	return &JSONObjectS{this.innerArray[index].(map[string]interface{})}
 }
 
 // String returns String from specific index
@@ -64,6 +64,6 @@ func (this *JSONArray) Float64(index int) float64 {
 
 // Length returns the length of this JSONArray
 func (this *JSONArray) Length() int {
-	theInnerArray := this.innerArray;
+	theInnerArray := this.innerArray
 	return len(theInnerArray)
 }
